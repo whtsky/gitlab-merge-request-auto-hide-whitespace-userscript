@@ -1,0 +1,14 @@
+{
+  "name": "gitlab-merge-request-auto-hide-whitespace-userscript",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:whtsky/gitlab-merge-request-auto-hide-whitespace-userscript.git",
+  "author": "Wu Haotian <whtsky@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "prettier": "prettier --write whitespace.userscript.js"
+  },
+  "devDependencies": {
+    "prettier": "^1.13.4"
+  }
+}
