@@ -1,22 +1,46 @@
 // ==UserScript==
 // @name         Auto Hide White Space Changes In GitLab
-// @version      0.2
+// @version      0.3
 // @description  Add `?w=1` for diff links in your GitLab Merge Request Page.
 // @author       Wu Haotian
 // @match        https://gitlab.com/*/merge_requests/*
 // @grant        none
 // ==/UserScript==
 
-(function() {
-  const diffAnchor = document.querySelector(
-    'li.diffs-tab a[data-target="#diffs"]'
-  );
-  if (diffAnchor && !diffAnchor.href.includes("w=1")) {
-    diffAnchor.href = `${diffAnchor.href}?w=1`;
+/**
+ * add `w=1` for given url
+ * @param {string} url
+ * @returns {string}
+ */
+function hideWhiteSpaceForURL(url) {
+  if (url.includes("w=1")) {
+    return url;
   }
-  Array.from(document.querySelectorAll('a[href*="diffs?"]')).map(anchor => {
-    if (!anchor.href.includes("w=1")) {
-      anchor.href = `${anchor.href}&w=1`;
-    }
-  });
+  let [main, hash] = url.split("#", 2);
+  if (main.includes("?")) {
+    main = `${main}&w=1`;
+  } else {
+    main = `${main}?w=1`;
+  }
+  if (hash) {
+    return [main, hash].join("#");
+  }
+  return main;
+}
+
+/**
+ * add `w=1` for given anchor element
+ * @param {HTMLAnchorElement} anchor
+ */
+function hideWhiteSpaceForAnchor(anchor) {
+  anchor.href = hideWhiteSpaceForURL(anchor.href);
+}
+
+(function() {
+  Array.from(document.querySelectorAll('a[href*="diffs"]')).map(
+    hideWhiteSpaceForAnchor
+  );
+  Array.from(document.querySelectorAll('a[href*="compare"]')).map(
+    hideWhiteSpaceForAnchor
+  );
 })();
